@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <CategoryComponent/>
-  </div>  
+    <div>
+        <CategoryComponent/>
+    </div>  
 </template>
 
 <script>
 import CategoryComponent from 'components/admin/category/CategoryComponent.vue';
 
 export default {
-  components: {
-    CategoryComponent
-  }
+    components: {
+        CategoryComponent
+    }
 }
 </script>
