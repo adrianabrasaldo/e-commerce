@@ -8,18 +8,12 @@ process.env.SECRET_KEY = 'secret'
 const Product = require('../models/Product')
 const Cart = require('../models/Cart')
 
-Product.hasMany(Cart, { foreignKey: 'product_id'})
-Cart.belongsTo(Product, { foreignKey: 'product_id'})
+Product.hasMany(Cart, { foreignKey: 'product_id' })
+Cart.belongsTo(Product, { foreignKey: 'product_id' })
 
 carts.get('/product_sold', (req, res) => {
-  
-  Cart.count({
-    col: 'cart_quantity'
-  })
-  .then(function(count) {
-      // count is an integer
-      res.json(count)
-  });
+    Cart.count({ col: 'cart_quantity'})
+    .then((count) => { res.json(count) });
 })
 
 module.exports = carts

@@ -8,53 +8,39 @@ subcategories.use(cors())
 
 process.env.SECRET_KEY = 'secret'
 
-subcategories.post('/createSubCategory', (req, res) => {
-  const today = new Date();
-  const subcategoryData = {
-    sub_category_name: req.body.sub_category_name,
-    category_id: req.body.category_id,
-    createdAt: today,
-    updatedAt: today
-  }
-  SubCategory.findOne({
-    where: {
-      sub_category_name: req.body.sub_category_name,
-      category_id: req.body.category_id
+subcategories.post('/createSubCategory', async (req, res) => {
+
+    const subcategoryData = {
+        sub_category_name: req.body.sub_category_name,
+        category_id: req.body.category_id,
+        createdAt: new Date(),
+        updatedAt: new Date()
     }
-  })
-  .then(subcategory => {
-    if(!subcategory) {
-      SubCategory.create(subcategoryData)
-      .then(subcategory => {
-        res.json({ 
-          status: subcategory.sub_category_name + ' sub category succesfully created!'
-        })
-      })
+    var find = await SubCategory.findOne({
+        where: {
+            sub_category_name: req.body.sub_category_name,
+            category_id: req.body.category_id
+        }
+    })
+    if (!find) {
+        var create = await create(subcategoryData)
+        res.json({ status: `${ create.sub_category_name } sub category succesfully created` })
     }
     else {
-      res.json({ error: 'Sub Category name already exist'})
+        res.json({ error: 'Sub Category name already exist' })
     }
-  })
-  .catch(err => {    
-    res.send('Creating new sub category name error: ' + err)
-  })
 })
 
-subcategories.post('/sub_category_dropdown', (req, res) => {
-  SubCategory.findAll({
-    where: {
-      category_id: req.body.category_id
-    }
-  })
-  .then(subcategory => {
-    const obj = subcategory.map(subcategory => {
-      return Object.assign({},{
-        label: subcategory.sub_category_name,
-        value: subcategory.sub_category_id
-      })
+subcategories.post('/sub_category_dropdown', async (req, res) => {
+    var find = await SubCategory.findAll({
+        where: { category_id: req.body.category_id }
     })
-    res.json(obj)
-  })
+    res.json(find.map(subcategory => {
+        return Object.assign({}, {
+            label: subcategory.sub_category_name,
+            value: subcategory.sub_category_id
+        })
+    }))
 })
 
 module.exports = subcategories
