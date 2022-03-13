@@ -46,7 +46,7 @@ categories.get('/categories', async (req, res) => {
     }))
 })
 
-categories.get('/category_dropdown', (req, res) => {
+categories.get('/category_dropdown', async (req, res) => {
     var category = await Category.findAll({ include: [{ model: SubCategory }] })
 
     res.json(category.map(category => {
